@@ -11,10 +11,11 @@ const symbolsCheck=document.querySelector("#symbols");
 const indicator=document.querySelector("[data-indicator]");
 const generateBtn=document.querySelector(".generateBtn");
 const allCheckbox=document.querySelector("input[type=checkbox]");
+const symbols='`~!@#$%^&*()_+-=[]\{}|;,./<>?';
 
 let password="";
 let passwordLength=10; // default value
-let checkCount=1;
+let checkCount=0;
 
 handleSlider();
 // ste strength circle color to grey 
@@ -50,7 +51,7 @@ function getRndinteger(min,max) {
 }
 
 function generateRandomNumber() {
-    return getRndinteger(0.9);
+    return getRndinteger(0,9);
 }
 
 function generateLowerCase(){
@@ -59,4 +60,96 @@ function generateLowerCase(){
 
 function generateUpperCase(){
     return String.fromCharCode(getRndinteger(65,91)) // these are ASCII numbers 
+}
+
+function generateSymbol() {
+    //created string contains all the symbols  
+    //generate Random number from string using getRndinteger(0,string.length)
+    const randNum=getRndinteger(0,symbols.length)
+    return symbols.charAt(randNum)
+};
+
+function calcStrength() {
+
+    //in the beginning all checkboxed are not checked
+    let hasUpper=false;
+    let hasLower=false
+    let hasNumber=false
+    let hasSymbol=false
+
+    // if user marked it as correct 
+   if(uppercaseCheck.checked) {
+    hasUpper=true
+   };
+
+   if(lowercaseCheck.checked) {
+    hasLower=true
+   };
+
+   if(numbersCheck.checked) {
+    hasNumber=true
+   };
+
+   if(symbolsCheck.checked) {
+     hasSymbol=true
+   }
+
+   // Criteria for Strength
+   if((hasUpper && hasLower) && passwordLength <=6) {
+       setIndicator("#ff0000"); // red
+   }  else if((hasUpper && hasLower)&& hasNumber && passwordLength <=10) {
+       setIndicator("#ffff00");  // yellow
+   }  else if(hasUpper && hasLower && hasNumber && hasSymbol && passwordLength >=10) {
+    setIndicator("#008000 ");  // Green
+   } else {
+    setIndicator("#ff0000");
+   };
+}
+
+// to count the number of boxes checked 
+function handleCheckBoxChange() {
+    checkCount=0;
+    allCheckbox.forEach((checkbox)=> {
+        if(checkbox.checked) {
+            checkCount++;
+        }
+    });
+    // if all chekcbox are checked but sliderlength is less 
+
+}
+ // function to copy 
+async function copyContent() {
+    try {
+        await navigator.clipboard.writeText(passwordDisplay.value);
+        copyMsg.innerText= "copied";
+    } catch(e) {
+        copyMsg.innerText= "Failed";
+    }
+    // to make copy span visible
+    copyMsg.classList.add("active");
+    
+    // set timeout for Copy message
+
+    setTimeout(() => {
+        copyMsg.classList.remove("active");
+    }, 2000);
+ 
+}
+
+// added eventlisteners
+inputSlider.addEventListener('input',(e) => {
+ passwordLength = e.target.value;
+ handleSlider();
+});
+// for copy button 
+copyBtn.addEventListener('click',()=>{
+    if(passwordDisplay.value) {
+        copyContent();
+    }   
+})
+//for generate Button 
+generateBtn.addEventListener() {
+    
+
+    
 }
