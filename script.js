@@ -44,7 +44,7 @@ function setIndicator(color) {
 }
 
 function getRndinteger(min,max) {
-    return Math.floor(Math.random()*(max-min))+min; 
+    return Math.floor(Math.random()*(max-min))+min;  
      // math.random = 0-1 means if max-min multiply with this 
      // we get ==0 - (max-min)==(0+min)-(max-min+min)==min-max; 
      // so here we got value between min to max  
@@ -109,14 +109,21 @@ function calcStrength() {
 // to count the number of boxes checked 
 function handleCheckBoxChange() {
     checkCount=0;
-    allCheckbox.forEach((checkbox)=> {
+    allCheckbox.forEach((checkbox)=> { 
         if(checkbox.checked) {
             checkCount++;
-        }
+        } 
     });
-    // if all chekcbox are checked but sliderlength is less 
-
+    // if password length is less than Checkbox checked then it should generate password atleast of count of checkbox checked 
+    if (passwordLength<checkCount) {
+        passwordLength=checkCount;
+        handleSlider();
+    }
 }
+
+allCheckbox.forEach((checkbox) => {
+    checkbox.addEventListener('change',handleCheckBoxChange);
+});
  // function to copy 
 async function copyContent() {
     try {
@@ -132,7 +139,7 @@ async function copyContent() {
 
     setTimeout(() => {
         copyMsg.classList.remove("active");
-    }, 2000);
+    }, 2000); 
  
 }
 
@@ -148,8 +155,7 @@ copyBtn.addEventListener('click',()=>{
     }   
 })
 //for generate Button 
-generateBtn.addEventListener() {
+generateBtn.addEventListener('click',() => {
+    // none of checkboxes are checked 
     
-
-    
-}
+}) 
