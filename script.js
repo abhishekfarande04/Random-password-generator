@@ -10,7 +10,7 @@ const numbersCheck=document.querySelector("#numbers");
 const symbolsCheck=document.querySelector("#symbols");
 const indicator=document.querySelector("[data-indicator]");
 const generateBtn=document.querySelector(".generateBtn");
-const allCheckbox=document.querySelector("input[type=checkbox]");
+const allCheckbox=document.querySelectorAll("input[type=checkbox]");
 const symbols='`~!@#$%^&*()_+-=[]\{}|;,./<>?';
 
 let password="";
@@ -69,6 +69,23 @@ function generateSymbol() {
     return symbols.charAt(randNum)
 };
 
+
+// after generating password we need all random letters and numbers and Symbols 
+function  shufflePassword() {
+    // Fisher Yates method 
+    let array=Array.from(password);
+    for(let i=array.length-1;i>0;i--) {
+        const j=Math.floor(Math.random()*(i+1));
+        const temp=array[i];
+        array[i]=array[j];
+        array[j]=temp;
+    }
+
+    let str="";
+    array.forEach((el)=> (str+=el));
+    return str;
+}
+
 function calcStrength() {
 
     //in the beginning all checkboxed are not checked
@@ -95,7 +112,7 @@ function calcStrength() {
    }
 
    // Criteria for Strength
-   if((hasUpper && hasLower) && passwordLength <=6) {
+     if((hasUpper && hasLower) && passwordLength <=6) {
        setIndicator("#ff0000"); // red
    }  else if((hasUpper && hasLower)&& hasNumber && passwordLength <=10) {
        setIndicator("#ffff00");  // yellow
@@ -157,5 +174,81 @@ copyBtn.addEventListener('click',()=>{
 //for generate Button 
 generateBtn.addEventListener('click',() => {
     // none of checkboxes are checked 
+    if(checkCount<=0) {
+        return ;
+    }
+
+    if(passwordLength<checkCount) {
+        passwordLength=checkCount;
+        handleSlider();
+    }
+    // lets find new password
+    // lets start tje journey to find new password 
+    console.log("Starting the journey");
+    // remove old password
+    password="";
+    // lets put the stuff mentioned by Checkboxes 
+
+    // if(uppercaseCheck.checked) {
+    //     password+=generateUpperCase();
+    // }
+
+    // if(lowercaseCheck.checked) {
+    //     password+=generateLowerCase();
+    // }
+
+    // if(numbersCheck.checked) {
+    //     password+=generateRandomNumber();
+    // }
+
+    // if(symbolsCheck.checked) {
+    //     password+=generateSymbol();
+    // }
+    // above is low level 
+
+    let funcArr=[];
+
+    if(uppercaseCheck.checked) {
+        funcArr.push(generateUpperCase);
+    } 
+
+    if(lowercaseCheck.checked) {
+        funcArr.push(generateLowerCase);
+    }
+
+    if(numbersCheck.checked) {
+        funcArr.push(generateRandomNumber);
+    }
+
+    if(symbolsCheck.checked) {
+        funcArr.push(generateSymbol );
+    }
+
+    // compulsory addition 
+    for(let i=0;i<funcArr.length;i++) {
+        password+=funcArr[i]();
+    }
+    console.log("Compulsory  addtion done ")
+    // remaining position 
+    for(let i=0;i<passwordLength-funcArr.length;i++) {
+        let randIndex=getRndinteger(0,funcArr.length);
+        password+=funcArr[randIndex]();
+    } 
+    console.log("remaining  addtion done ")
+
+    // shuffle the password 
+    password=shufflePassword(Array.from(password));
+
+    // show in UI 
+    passwordDisplay.value=password;
+
+    //calculate Strength
+    calcStrength();
+
+
+
+ 
+
+
     
 }) 
