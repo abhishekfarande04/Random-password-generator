@@ -87,40 +87,39 @@ function  shufflePassword() {
 }
 
 function calcStrength() {
+    let hasUpper = false;
+    let hasLower = false;
+    let hasNum = false;
+    let hasSym = false;
+    if (uppercaseCheck.checked) {
+        hasUpper = true;
+    }
+    if (lowercaseCheck.checked) {
+        hasLower = true;
+    }
+    if (numbersCheck.checked) {
+        hasNum = true;
 
-    //in the beginning all checkboxed are not checked
-    let hasUpper=false;
-    let hasLower=false
-    let hasNumber=false
-    let hasSymbol=false
+    }
+    if (symbolsCheck.checked) {
+        hasSym = true;
+    }
+  
+    if (hasUpper && hasLower && (hasNum || hasSym) && passwordLength >= 8) {
+      setIndicator("#0f0");
+    } else if (
+      (hasLower || hasUpper) &&
+      (hasNum || hasSym) &&
+      passwordLength >= 6
+    ) {
+      setIndicator("#ff0");
+    } else {
+      setIndicator("#f00");
+    }
+}
 
-    // if user marked it as correct 
-   if(uppercaseCheck.checked) {
-    hasUpper=true
-   };
 
-   if(lowercaseCheck.checked) {
-    hasLower=true
-   };
 
-   if(numbersCheck.checked) {
-    hasNumber=true
-   };
-
-   if(symbolsCheck.checked) {
-     hasSymbol=true
-   }
-
-   // Criteria for Strength
-     if((hasUpper && hasLower) && passwordLength <=6) {
-       setIndicator("#ff0000"); // red
-   }  else if((hasUpper && hasLower)&& hasNumber && passwordLength <=10) {
-       setIndicator("#ffff00");  // yellow
-   }  else if(hasUpper && hasLower && hasNumber && hasSymbol && passwordLength >=10) {
-    setIndicator("#008000 ");  // Green
-   } else {
-    setIndicator("#ff0000");
-   };
 }
 
 // to count the number of boxes checked 
