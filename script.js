@@ -36,11 +36,19 @@ handleSlider();
 function handleSlider() {
     inputSlider.value=passwordLength;
     lengthDisplay.innerText=passwordLength;
+    // we want color area upto the password length only 
+    const min=inputSlider.min;
+    const max =inputSlider.max;
+    inputSlider.style.backgroundSize=((passwordLength-min)*100/(max-min))+ "% 100%";
+
+
+      
 };
 
 function setIndicator(color) {
     indicator.style.backgroundColor=color;
-    // need to put shadow Homework 
+    indicator.style.boxShadow=`0px 0px 12px 1px ${color}`;
+    
 }
 
 function getRndinteger(min,max) {
@@ -117,10 +125,9 @@ function calcStrength() {
       setIndicator("#f00");
     }
 }
+ 
 
 
-
-}
 
 // to count the number of boxes checked 
 function handleCheckBoxChange() {
